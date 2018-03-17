@@ -1,5 +1,14 @@
 /**
 A Singleton that deals with inputs.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.input;
 import std.meta : AliasSeq, staticIndexOf;
@@ -60,7 +69,7 @@ public:
 		*/
 		mouseModeCaptured = 2,
 		/**
-		
+		Makes the mouse cursor visible but confines it to the game window.
 		*/
 		mouseModeConfined = 3,
 	}
@@ -68,71 +77,71 @@ public:
 	enum CursorShape : int
 	{
 		/**
-		
+		Arrow cursor. Standard, default pointing cursor.
 		*/
 		cursorArrow = 0,
 		/**
-		
+		I-beam cursor. Usually used to show where the text cursor will appear when the mouse is clicked.
 		*/
 		cursorIbeam = 1,
 		/**
-		
+		Pointing hand cursor. Usually used to indicate the pointer is over a link or other interactable item.
 		*/
 		cursorPointingHand = 2,
 		/**
-		
+		Cross cursor. Typically appears over regions in which a drawing operation can be performance or for selections.
 		*/
 		cursorCross = 3,
 		/**
-		
+		Wait cursor. Indicates that the application is busy performing an operation.
 		*/
 		cursorWait = 4,
 		/**
-		
+		Busy cursor. See `CURSOR_WAIT`.
 		*/
 		cursorBusy = 5,
 		/**
-		
+		Drag cursor. Usually displayed when dragging something.
 		*/
 		cursorDrag = 6,
 		/**
-		
+		Can drop cursor. Usually displayed when dragging something to indicate that it can be dropped at the current position.
 		*/
 		cursorCanDrop = 7,
 		/**
-		
+		Forbidden cursor. Indicates that the current action is forbidden (for example, when dragging something) or that the control at a position is disabled.
 		*/
 		cursorForbidden = 8,
 		/**
-		
+		Vertical resize mouse cursor. A double headed vertical arrow. It tells the user they can resize the window or the panel vertically.
 		*/
 		cursorVsize = 9,
 		/**
-		
+		Horizontal resize mouse cursor. A double headed horizontal arrow. It tells the user they can resize the window or the panel horizontally.
 		*/
 		cursorHsize = 10,
 		/**
-		
+		Window resize mouse cursor. The cursor is a double headed arrow that goes from the bottom left to the top right. It tells the user they can resize the window or the panel both horizontally and vertically.
 		*/
 		cursorBdiagsize = 11,
 		/**
-		
+		Window resize mouse cursor. The cursor is a double headed arrow that goes from the top left to the bottom right, the opposite of `CURSOR_BDIAGSIZE`. It tells the user they can resize the window or the panel both horizontally and vertically.
 		*/
 		cursorFdiagsize = 12,
 		/**
-		
+		Move cursor. Indicates that something can be moved.
 		*/
 		cursorMove = 13,
 		/**
-		
+		Vertical split mouse cursor. On Windows, it's the same as `CURSOR_VSIZE`.
 		*/
 		cursorVsplit = 14,
 		/**
-		
+		Horizontal split mouse cursor. On Windows, it's the same as `CURSOR_HSIZE`.
 		*/
 		cursorHsplit = 15,
 		/**
-		
+		Help cursor. Usually a question mark.
 		*/
 		cursorHelp = 16,
 	}
@@ -385,7 +394,7 @@ public:
 	package(godot) static GodotMethod!(Vector3) _GODOT_get_gravity;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_gravity") = _GODOT_get_gravity;
 	/**
-	
+	If the device has an accelerometer, this will return the gravity. Otherwise, it returns an empty $(D Vector3).
 	*/
 	Vector3 getGravity() const
 	{
@@ -395,7 +404,7 @@ public:
 	package(godot) static GodotMethod!(Vector3) _GODOT_get_accelerometer;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_accelerometer") = _GODOT_get_accelerometer;
 	/**
-	If the device has an accelerometer, this will return the movement.
+	If the device has an accelerometer, this will return the acceleration. Otherwise, it returns an empty $(D Vector3).
 	*/
 	Vector3 getAccelerometer() const
 	{
@@ -415,7 +424,7 @@ public:
 	package(godot) static GodotMethod!(Vector3) _GODOT_get_gyroscope;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_gyroscope") = _GODOT_get_gyroscope;
 	/**
-	If the device has a gyroscope, this will return the rate of rotation in rad/s around a device's x, y, and z axis.
+	If the device has a gyroscope, this will return the rate of rotation in rad/s around a device's x, y, and z axis. Otherwise, it returns an empty $(D Vector3).
 	*/
 	Vector3 getGyroscope() const
 	{
@@ -505,7 +514,7 @@ public:
 	package(godot) static GodotMethod!(void, InputEvent) _GODOT_parse_input_event;
 	package(godot) alias _GODOT_methodBindInfo(string name : "parse_input_event") = _GODOT_parse_input_event;
 	/**
-	
+	Feeds an $(D InputEvent) to the game. Can be used to artificially trigger input events from code.
 	*/
 	void parseInputEvent(InputEvent event)
 	{

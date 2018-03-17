@@ -1,5 +1,14 @@
 /**
 Image datatype.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.image;
 import std.meta : AliasSeq, staticIndexOf;
@@ -120,143 +129,143 @@ public:
 		*/
 		formatLa8 = 1,
 		/**
-		
+		OpenGL texture format RED with a single component and a bitdepth of 8.
 		*/
 		formatR8 = 2,
 		/**
-		
+		OpenGL texture format RG with two components and a bitdepth of 8 for each.
 		*/
 		formatRg8 = 3,
 		/**
-		
+		OpenGL texture format RGB with three components, each with a bitdepth of 8.
 		*/
 		formatRgb8 = 4,
 		/**
-		
+		OpenGL texture format RGBA with four components, each with a bitdepth of 8.
 		*/
 		formatRgba8 = 5,
 		/**
-		
+		OpenGL texture format RGBA with four components, each with a bitdepth of 4.
 		*/
 		formatRgba4444 = 6,
 		/**
-		
+		OpenGL texture format GL_RGB5_A1 where 5 bits of depth for each component of RGB and one bit for alpha.
 		*/
 		formatRgba5551 = 7,
 		/**
-		
+		OpenGL texture format GL_R32F where there's one component, a 32-bit floating-point value.
 		*/
 		formatRf = 8,
 		/**
-		
+		OpenGL texture format GL_RG32F where there are two components, each a 32-bit floating-point values.
 		*/
 		formatRgf = 9,
 		/**
-		
+		OpenGL texture format GL_RGB32F where there are three components, each a 32-bit floating-point values.
 		*/
 		formatRgbf = 10,
 		/**
-		
+		OpenGL texture format GL_RGBA32F where there are four components, each a 32-bit floating-point values.
 		*/
 		formatRgbaf = 11,
 		/**
-		
+		OpenGL texture format GL_R32F where there's one component, a 16-bit "half-precision" floating-point value.
 		*/
 		formatRh = 12,
 		/**
-		
+		OpenGL texture format GL_RG32F where there's two components, each a 16-bit "half-precision" floating-point value.
 		*/
 		formatRgh = 13,
 		/**
-		
+		OpenGL texture format GL_RGB32F where there's three components, each a 16-bit "half-precision" floating-point value.
 		*/
 		formatRgbh = 14,
 		/**
-		
+		OpenGL texture format GL_RGBA32F where there's four components, each a 16-bit "half-precision" floating-point value.
 		*/
 		formatRgbah = 15,
 		/**
-		
+		A special OpenGL texture format where the three color components have 9 bits of precision and all three share a single exponent.
 		*/
 		formatRgbe9995 = 16,
 		/**
-		
+		The S3TC texture format that uses Block Compression 1, and is the smallest variation of S3TC, only providing 1 bit of alpha and color data being premultiplied with alpha. More information can be found at https://www.khronos.org/opengl/wiki/S3_Texture_Compression.
 		*/
 		formatDxt1 = 17,
 		/**
-		
+		The S3TC texture format that uses Block Compression 2, and color data is interpreted as not having been premultiplied by alpha. Well suited for images with sharp alpha transitions between translucent and opaque areas.
 		*/
 		formatDxt3 = 18,
 		/**
-		
+		The S3TC texture format also known as Block Compression 3 or BC3 that contains 64 bits of alpha channel data followed by 64 bits of DXT1-encoded color data. Color data is not premultiplied by alpha, same as DXT3. DXT5 generally produces superior results for transparency gradients than DXT3.
 		*/
 		formatDxt5 = 19,
 		/**
-		
+		Texture format that uses Red Green Texture Compression, normalizing the red channel data using the same compression algorithm that DXT5 uses for the alpha channel. More information can be found here https://www.khronos.org/opengl/wiki/Red_Green_Texture_Compression.
 		*/
 		formatRgtcR = 20,
 		/**
-		
+		Texture format that uses Red Green Texture Compression, normalizing the red and green channel data using the same compression algorithm that DXT5 uses for the alpha channel.
 		*/
 		formatRgtcRg = 21,
 		/**
-		
+		Texture format that uses BPTC compression with unsigned normalized RGBA components. More information can be found at https://www.khronos.org/opengl/wiki/BPTC_Texture_Compression.
 		*/
 		formatBptcRgba = 22,
 		/**
-		
+		Texture format that uses BPTC compression with signed floating-point RGB components.
 		*/
 		formatBptcRgbf = 23,
 		/**
-		
+		Texture format that uses BPTC compression with unsigned floating-point RGB components.
 		*/
 		formatBptcRgbfu = 24,
 		/**
-		
+		Texture format used on PowerVR-supported mobile platforms, uses 2 bit color depth with no alpha. More information on PVRTC can be found here https://en.wikipedia.org/wiki/PVRTC.
 		*/
 		formatPvrtc2 = 25,
 		/**
-		
+		Same as PVRTC2, but with an alpha component.
 		*/
 		formatPvrtc2a = 26,
 		/**
-		
+		Similar to PVRTC2, but with 4 bit color depth and no alpha.
 		*/
 		formatPvrtc4 = 27,
 		/**
-		
+		Same as PVRTC4, but with an alpha component.
 		*/
 		formatPvrtc4a = 28,
 		/**
-		
+		Ericsson Texture Compression format, also referred to as 'ETC1', and is part of the OpenGL ES graphics standard. An overview of the format is given at https://en.wikipedia.org/wiki/Ericsson_Texture_Compression#ETC1.
 		*/
 		formatEtc = 29,
 		/**
-		
+		Ericsson Texture Compression format 2 variant R11_EAC, which provides one channel of unsigned data.
 		*/
 		formatEtc2R11 = 30,
 		/**
-		
+		Ericsson Texture Compression format 2 variant SIGNED_R11_EAC, which provides one channel of signed data.
 		*/
 		formatEtc2R11s = 31,
 		/**
-		
+		Ericsson Texture Compression format 2 variant RG11_EAC, which provides two channels of unsigned data.
 		*/
 		formatEtc2Rg11 = 32,
 		/**
-		
+		Ericsson Texture Compression format 2 variant SIGNED_RG11_EAC, which provides two channels of signed data.
 		*/
 		formatEtc2Rg11s = 33,
 		/**
-		
+		Ericsson Texture Compression format 2 variant RGB8, which is a followup of ETC1 and compresses RGB888 data.
 		*/
 		formatEtc2Rgb8 = 34,
 		/**
-		
+		Ericsson Texture Compression format 2 variant RGBA8, which compresses RGBA8888 data with full alpha support.
 		*/
 		formatEtc2Rgba8 = 35,
 		/**
-		
+		Ericsson Texture Compression format 2 variant RGB8_PUNCHTHROUGH_ALPHA1, which compresses RGBA data to make alpha either fully transparent or fully opaque.
 		*/
 		formatEtc2Rgb8a1 = 36,
 		/**

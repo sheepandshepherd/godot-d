@@ -1,5 +1,14 @@
 /**
 Scalable texture-based frame that tiles the texture's centers and sides, but keeps the corners' original size. Perfect for panels and dialog boxes.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.ninepatchrect;
 import std.meta : AliasSeq, staticIndexOf;

@@ -1,5 +1,14 @@
 /**
 A GraphNode is a container with several input and output slots allowing connections between GraphNodes. Slots can have different, incompatible types.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.graphnode;
 import std.meta : AliasSeq, staticIndexOf;

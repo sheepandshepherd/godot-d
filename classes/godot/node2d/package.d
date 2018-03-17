@@ -1,5 +1,14 @@
 /**
 A 2D game object, parent of all 2D related nodes. Has a position, rotation, scale and Z-index.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.node2d;
 import std.meta : AliasSeq, staticIndexOf;

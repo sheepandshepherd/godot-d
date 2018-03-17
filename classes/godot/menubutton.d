@@ -1,5 +1,14 @@
 /**
 Special button that brings up a $(D PopupMenu) when clicked.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.menubutton;
 import std.meta : AliasSeq, staticIndexOf;

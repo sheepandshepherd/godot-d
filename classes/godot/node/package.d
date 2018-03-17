@@ -1,5 +1,14 @@
 /**
 Base class for all $(I scene) objects.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.node;
 import std.meta : AliasSeq, staticIndexOf;
@@ -19,7 +28,7 @@ import godot.viewport;
 Base class for all $(I scene) objects.
 
 Nodes are Godot's building blocks. They can be assigned as the child of another node, resulting in a tree arrangement. A given node can contain any number of nodes as children with the requirement that all siblings (direct children of a node) should have unique names.
-A tree of nodes is called a $(I scene). Scenes can be saved to the disk and then instanced into other scenes. This allows for very high flexibility in the architecture and data model of Godot projects. Nodes can also optionally be added to groups. This makes it possible to access a number of nodes from code (an "enemies" group, for example) to perform grouped actions.
+A tree of nodes is called a $(I scene). Scenes can be saved to the disk and then instanced into other scenes. This allows for very high flexibility in the architecture and data model of Godot projects.
 $(B Scene tree:) The $(D SceneTree) contains the active tree of nodes. When a node is added to the scene tree, it receives the NOTIFICATION_ENTER_TREE notification and its $(D _enterTree) callback is triggered. Child nodes are always added $(I after) their parent node, i.e. the $(D _enterTree) callback of a parent node will be triggered before its child's.
 Once all nodes have been added in the scene tree, they receive the NOTIFICATION_READY notification and their respective $(D _ready) callbacks are triggered. For groups of nodes, the $(D _ready) callback is called in reverse order, starting with the children and moving up to the parent nodes.
 This means that when adding a node to the scene tree, the following order will be used for the callbacks: $(D _enterTree) of the parent, $(D _enterTree) of the children, $(D _ready) of the children and finally $(D _ready) of the parent (recursively for the entire scene tree).
@@ -27,7 +36,8 @@ $(B Processing:) Nodes can override the "process" state, so that they receive a 
 Nodes can also process input events. When present, the $(D _input) function will be called for each input that the program receives. In many cases, this can be overkill (unless used for simple projects), and the $(D _unhandledInput) function might be preferred; it is called when the input event was not handled by anyone else (typically, GUI $(D Control) nodes), ensuring that the node only receives the events that were meant for it.
 To keep track of the scene hierarchy (especially when instancing scenes into other scenes), an "owner" can be set for the node with $(D setOwner). This keeps track of who instanced what. This is mostly useful when writing editors and tools, though.
 Finally, when a node is freed with $(D free) or $(D queueFree), it will also free all its children.
-$(B Networking with nodes:) After connecting to a server (or making one, see $(D NetworkedMultiplayerENet)) it is possible to use the built-in RPC (remote procedure call) system to communicate over the network. By calling $(D rpc) with a method name, it will be called locally and in all connected peers (peers = clients and the server that accepts connections), with behaviour varying depending on the network mode ($(D setNetworkMode)) of the receiving peer. To identify which node receives the RPC call Godot will use its $(D NodePath) (make sure node names are the same on all peers).
+$(B Groups:) Nodes can be added to as many groups as you want to be easy to manage, you could create groups like "enemies" or "collectables" for example, depending on your game. See $(D addToGroup), $(D isInGroup) and $(D removeFromGroup). You can then retrieve all nodes in these groups, iterate them and even call methods on groups via the methods on $(D SceneTree).
+$(B Networking with nodes:) After connecting to a server (or making one, see $(D NetworkedMultiplayerENet)) it is possible to use the built-in RPC (remote procedure call) system to communicate over the network. By calling $(D rpc) with a method name, it will be called locally and in all connected peers (peers = clients and the server that accepts connections). To identify which node receives the RPC call Godot will use its $(D NodePath) (make sure node names are the same on all peers). Also take a look at the high-level networking tutorial and corresponding demos.
 */
 @GodotBaseClass struct Node
 {
@@ -52,15 +62,15 @@ public:
 	enum PauseMode : int
 	{
 		/**
-		Inherits pause mode from parent. For root node, it is equivalent to PAUSE_MODE_STOP.
+		Inherits pause mode from the node's parent. For the root node, it is equivalent to PAUSE_MODE_STOP. Default.
 		*/
 		pauseModeInherit = 0,
 		/**
-		Stop processing when SceneTree is paused.
+		Stop processing when the $(D SceneTree) is paused.
 		*/
 		pauseModeStop = 1,
 		/**
-		Continue to process regardless of SceneTree pause state.
+		Continue to process regardless of the $(D SceneTree) pause state.
 		*/
 		pauseModeProcess = 2,
 	}
@@ -88,23 +98,23 @@ public:
 	enum RPCMode : int
 	{
 		/**
-		
+		Used with $(D rpcConfig) or $(D rsetConfig) to disable a method or property for all RPC calls, making it unavailable. Default for all methods.
 		*/
 		rpcModeDisabled = 0,
 		/**
-		Call a method remotely.
+		Used with $(D rpcConfig) or $(D rsetConfig) to set a method to be called or a property to be changed only on the remote end, not locally. Analogous to the `remote` keyword.
 		*/
 		rpcModeRemote = 1,
 		/**
-		Call a method both remotely and locally.
+		Used with $(D rpcConfig) or $(D rsetConfig) to set a method to be called or a property to be changed both on the remote end and locally. Analogous to the `sync` keyword.
 		*/
 		rpcModeSync = 2,
 		/**
-		Call a method if the Node is Master.
+		Used with $(D rpcConfig) or $(D rsetConfig) to set a method to be called or a property to be changed only on the network master for this node. Analogous to the `master` keyword. See $(D setNetworkMaster).
 		*/
 		rpcModeMaster = 3,
 		/**
-		Call a method if the Node is Slave.
+		Used with $(D rpcConfig) or $(D rsetConfig) to set a method to be called or a property to be changed only on slaves for this node. Analogous to the `slave` keyword. See $(D setNetworkMaster).
 		*/
 		rpcModeSlave = 4,
 	}
@@ -180,15 +190,15 @@ public:
 		*/
 		notificationPathChanged = 23,
 		/**
-		
+		Notification received when translations may have changed. Can be triggered by the user changing the locale. Can be used to respond to language changes, for example to change the UI strings on the fly. Useful when working with the built-in translation support, like $(D GodotObject.tr).
 		*/
 		notificationTranslationChanged = 24,
 		/**
-		
+		Notification received every frame when the internal process flag is set (see $(D setProcessInternal)).
 		*/
 		notificationInternalProcess = 25,
 		/**
-		
+		Notification received every frame when the internal physics process flag is set (see $(D setPhysicsProcessInternal)).
 		*/
 		notificationInternalPhysicsProcess = 26,
 	}
@@ -248,7 +258,8 @@ public:
 	package(godot) alias _GODOT_methodBindInfo(string name : "_ready") = _GODOT__ready;
 	/**
 	Called when the node is "ready", i.e. when both the node and its children have entered the scene tree. If the node has children, their $(D _ready) callbacks get triggered first, and the parent node will receive the ready notification afterwards.
-	Corresponds to the NOTIFICATION_READY notification in $(D GodotObject._notification).
+	Corresponds to the NOTIFICATION_READY notification in $(D GodotObject._notification). See also the `onready` keyword for variables.
+	Usually used for initialization. For even earlier initialization, $(D GodotObject._init) may be used. Also see $(D _enterTree).
 	*/
 	void _ready()
 	{
@@ -261,6 +272,8 @@ public:
 	/**
 	Called when there is an input event. The input event propagates through the node tree until a node consumes it.
 	It is only called if input processing is enabled, which is done automatically if this method is overridden, and can be toggled with $(D setProcessInput).
+	To consume the input event and stop it propagating further to other nodes, $(D SceneTree.setInputAsHandled) can be called.
+	For gameplay input, $(D _unhandledInput) and $(D _unhandledKeyInput) are usually a better fit as they allow the GUI to intercept the events first.
 	*/
 	void _input(InputEvent event)
 	{
@@ -272,8 +285,10 @@ public:
 	package(godot) static GodotMethod!(void, InputEvent) _GODOT__unhandled_input;
 	package(godot) alias _GODOT_methodBindInfo(string name : "_unhandled_input") = _GODOT__unhandled_input;
 	/**
-	Propagated to all nodes when the previous InputEvent is not consumed by any nodes.
+	Propagated to all nodes when the previous $(D InputEvent) is not consumed by any nodes.
 	It is only called if unhandled input processing is enabled, which is done automatically if this method is overridden, and can be toggled with $(D setProcessUnhandledInput).
+	To consume the input event and stop it propagating further to other nodes, $(D SceneTree.setInputAsHandled) can be called.
+	For gameplay input, this and $(D _unhandledKeyInput) are usually a better fit than $(D _input) as they allow the GUI to intercept the events first.
 	*/
 	void _unhandledInput(InputEvent event)
 	{
@@ -285,7 +300,10 @@ public:
 	package(godot) static GodotMethod!(void, InputEventKey) _GODOT__unhandled_key_input;
 	package(godot) alias _GODOT_methodBindInfo(string name : "_unhandled_key_input") = _GODOT__unhandled_key_input;
 	/**
-	
+	Propagated to all nodes when the previous $(D InputEventKey) is not consumed by any nodes.
+	It is only called if unhandled key input processing is enabled, which is done automatically if this method is overridden, and can be toggled with $(D setProcessUnhandledKeyInput).
+	To consume the input event and stop it propagating further to other nodes, $(D SceneTree.setInputAsHandled) can be called.
+	For gameplay input, this and $(D _unhandledInput) are usually a better fit than $(D _input) as they allow the GUI to intercept the events first.
 	*/
 	void _unhandledKeyInput(InputEventKey event)
 	{
@@ -498,7 +516,7 @@ public:
 	package(godot) static GodotMethod!(NodePath, GodotObject) _GODOT_get_path_to;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_path_to") = _GODOT_get_path_to;
 	/**
-	Returns the relative path from the current node to the specified node in "node" argument. Both nodes must be in the same scene, or the function will fail.
+	Returns the relative $(D NodePath) from this node to the specified `node`. Both nodes must be in the same scene or the function will fail.
 	*/
 	NodePath getPathTo(GodotObject node) const
 	{
@@ -508,7 +526,7 @@ public:
 	package(godot) static GodotMethod!(void, String, bool) _GODOT_add_to_group;
 	package(godot) alias _GODOT_methodBindInfo(string name : "add_to_group") = _GODOT_add_to_group;
 	/**
-	Adds the node to a group. Groups are helpers to name and organize a subset of nodes, for example "enemies" or "collectables". A node can be in any number of groups. Nodes can be assigned a group at any time, but will not be added until they are inside the scene tree (see $(D isInsideTree)).
+	Adds the node to a group. Groups are helpers to name and organize a subset of nodes, for example "enemies" or "collectables". A node can be in any number of groups. Nodes can be assigned a group at any time, but will not be added until they are inside the scene tree (see $(D isInsideTree)). See notes in the description, and the group methods in $(D SceneTree).
 	*/
 	void addToGroup(StringArg0)(in StringArg0 group, in bool persistent = false)
 	{
@@ -518,7 +536,7 @@ public:
 	package(godot) static GodotMethod!(void, String) _GODOT_remove_from_group;
 	package(godot) alias _GODOT_methodBindInfo(string name : "remove_from_group") = _GODOT_remove_from_group;
 	/**
-	Removes a node from a group.
+	Removes a node from a group. See notes in the description, and the group methods in $(D SceneTree).
 	*/
 	void removeFromGroup(StringArg0)(in StringArg0 group)
 	{
@@ -528,7 +546,7 @@ public:
 	package(godot) static GodotMethod!(bool, String) _GODOT_is_in_group;
 	package(godot) alias _GODOT_methodBindInfo(string name : "is_in_group") = _GODOT_is_in_group;
 	/**
-	Returns `true` if this node is in the specified group.
+	Returns `true` if this node is in the specified group. See notes in the description, and the group methods in $(D SceneTree).
 	*/
 	bool isInGroup(StringArg0)(in StringArg0 group) const
 	{
@@ -608,7 +626,7 @@ public:
 	package(godot) static GodotMethod!(void) _GODOT_print_tree;
 	package(godot) alias _GODOT_methodBindInfo(string name : "print_tree") = _GODOT_print_tree;
 	/**
-	Prints the scene to stdout. Used mainly for debugging purposes.
+	Prints the scene hierarchy of this node and all it's children to stdout. Used mainly for debugging purposes.
 	*/
 	void printTree()
 	{
@@ -808,7 +826,7 @@ public:
 	package(godot) static GodotMethod!(void) _GODOT_print_stray_nodes;
 	package(godot) alias _GODOT_methodBindInfo(string name : "print_stray_nodes") = _GODOT_print_stray_nodes;
 	/**
-	
+	Prints all stray nodes (nodes outside the $(D SceneTree)). Used for debugging. Works only in debug builds.
 	*/
 	void printStrayNodes()
 	{
@@ -848,7 +866,7 @@ public:
 	package(godot) static GodotMethod!(void, bool) _GODOT_set_process_internal;
 	package(godot) alias _GODOT_methodBindInfo(string name : "set_process_internal") = _GODOT_set_process_internal;
 	/**
-	
+	Enables or disabled internal processing for this node. Internal processing happens in isolation from the normal $(D method)_process$(D /code) calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or processing is disabled for scripting ($(D setProcess)). Only useful for advanced uses to manipulate built-in nodes behaviour.
 	*/
 	void setProcessInternal(in bool enable)
 	{
@@ -858,7 +876,7 @@ public:
 	package(godot) static GodotMethod!(bool) _GODOT_is_processing_internal;
 	package(godot) alias _GODOT_methodBindInfo(string name : "is_processing_internal") = _GODOT_is_processing_internal;
 	/**
-	
+	Returns `true` if internal processing is enabled (see $(D setProcessInternal)).
 	*/
 	bool isProcessingInternal() const
 	{
@@ -868,7 +886,7 @@ public:
 	package(godot) static GodotMethod!(void, bool) _GODOT_set_physics_process_internal;
 	package(godot) alias _GODOT_methodBindInfo(string name : "set_physics_process_internal") = _GODOT_set_physics_process_internal;
 	/**
-	
+	Enables or disables internal physics for this node. Internal physics processing happens in isolation from the normal $(D method)_physics_process$(D /code) calls and is used by some nodes internally to guarantee proper functioning even if the node is paused or physics processing is disabled for scripting ($(D setPhysicsProcess)). Only useful for advanced uses to manipulate built-in nodes behaviour.
 	*/
 	void setPhysicsProcessInternal(in bool enable)
 	{
@@ -878,7 +896,7 @@ public:
 	package(godot) static GodotMethod!(bool) _GODOT_is_physics_processing_internal;
 	package(godot) alias _GODOT_methodBindInfo(string name : "is_physics_processing_internal") = _GODOT_is_physics_processing_internal;
 	/**
-	
+	Returns `true` if internal physics processing is enabled (see $(D setPhysicsProcessInternal)).
 	*/
 	bool isPhysicsProcessingInternal() const
 	{
@@ -919,7 +937,7 @@ public:
 	package(godot) static GodotMethod!(void, bool) _GODOT_set_scene_instance_load_placeholder;
 	package(godot) alias _GODOT_methodBindInfo(string name : "set_scene_instance_load_placeholder") = _GODOT_set_scene_instance_load_placeholder;
 	/**
-	
+	Sets whether this is an instance load placeholder. See $(D InstancePlaceholder).
 	*/
 	void setSceneInstanceLoadPlaceholder(in bool load_placeholder)
 	{
@@ -929,7 +947,7 @@ public:
 	package(godot) static GodotMethod!(bool) _GODOT_get_scene_instance_load_placeholder;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_scene_instance_load_placeholder") = _GODOT_get_scene_instance_load_placeholder;
 	/**
-	
+	Returns `true` if this is an instance load placeholder. See $(D InstancePlaceholder).
 	*/
 	bool getSceneInstanceLoadPlaceholder() const
 	{
@@ -969,7 +987,7 @@ public:
 	package(godot) static GodotMethod!(void, long, bool) _GODOT_set_network_master;
 	package(godot) alias _GODOT_methodBindInfo(string name : "set_network_master") = _GODOT_set_network_master;
 	/**
-	Sets the node network master to the peer with the given peer ID. The network master is the peer that has authority over it on the network. Inherited from the parent node by default, which ultimately defaults to peer ID 1 (the server).
+	Sets the node's network master to the peer with the given peer ID. The network master is the peer that has authority over the node on the network. Useful in conjunction with the `master` and `slave` keywords. Inherited from the parent node by default, which ultimately defaults to peer ID 1 (the server). If `recursive`, the given peer is recursively set as the master for all children of this node.
 	*/
 	void setNetworkMaster(in long id, in bool recursive = true)
 	{
@@ -979,7 +997,7 @@ public:
 	package(godot) static GodotMethod!(long) _GODOT_get_network_master;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_network_master") = _GODOT_get_network_master;
 	/**
-	Returns the peer ID of the network master for this node.
+	Returns the peer ID of the network master for this node. See $(D setNetworkMaster).
 	*/
 	long getNetworkMaster() const
 	{
@@ -989,7 +1007,7 @@ public:
 	package(godot) static GodotMethod!(bool) _GODOT_is_network_master;
 	package(godot) alias _GODOT_methodBindInfo(string name : "is_network_master") = _GODOT_is_network_master;
 	/**
-	
+	Returns `true` if the local system is the master of this node.
 	*/
 	bool isNetworkMaster() const
 	{
@@ -999,7 +1017,7 @@ public:
 	package(godot) static GodotMethod!(void, String, long) _GODOT_rpc_config;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rpc_config") = _GODOT_rpc_config;
 	/**
-	Changes the method's RPC mode (one of RPC_MODE_* constants).
+	Changes the RPC mode for the given `method` to the given `mode`. See $(D rpcmode). An alternative is annotating methods and properties with the corresponding keywords (`remote`, `sync`, `master`, `slave`). By default, methods are not exposed to networking (and RPCs). Also see $(D rset) and $(D rsetConfig) for properties.
 	*/
 	void rpcConfig(StringArg0)(in StringArg0 method, in long mode)
 	{
@@ -1009,7 +1027,7 @@ public:
 	package(godot) static GodotMethod!(void, String, long) _GODOT_rset_config;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rset_config") = _GODOT_rset_config;
 	/**
-	Changes the property's RPC mode (one of RPC_MODE_* constants).
+	Changes the RPC mode for the given `property` to the given `mode`. See $(D rpcmode). An alternative is annotating methods and properties with the corresponding keywords (`remote`, `sync`, `master`, `slave`). By default, properties are not exposed to networking (and RPCs). Also see $(D rpc) and $(D rpcConfig) for methods.
 	*/
 	void rsetConfig(StringArg0)(in StringArg0 property, in long mode)
 	{
@@ -1042,7 +1060,7 @@ public:
 	package(godot) static GodotMethod!(Variant, String, GodotVarArgs) _GODOT_rpc;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rpc") = _GODOT_rpc;
 	/**
-	Sends a remote procedure call request to all peers on the network (and locally), optionally sending additional data as arguments. Call request will be received by nodes with the same $(D NodePath).
+	Sends a remote procedure call request for the given `method` to peers on the network (and locally), optionally sending all additional arguments as arguments to the method called by the RPC. The call request will only be received by nodes with the same $(D NodePath), including the exact same node name. Behaviour depends on the RPC configuration for the given method, see $(D rpcConfig). Methods are not exposed to RPCs by default. Also see $(D rset) and $(D rsetConfig) for properties. Returns an empty $(D Variant). Note that you can only safely use RPCs on clients after you received the `connected_to_server` signal from the $(D SceneTree). You also need to keep track of the connection state, either by the $(D SceneTree) signals like `server_disconnected` or by checking `SceneTree.network_peer.get_connection_status() == CONNECTION_CONNECTED`.
 	*/
 	Variant rpc(StringArg0, VarArgs...)(in StringArg0 method, VarArgs varArgs)
 	{
@@ -1058,7 +1076,7 @@ public:
 	package(godot) static GodotMethod!(Variant, String, GodotVarArgs) _GODOT_rpc_unreliable;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rpc_unreliable") = _GODOT_rpc_unreliable;
 	/**
-	Sends a $(D rpc) using an unreliable protocol.
+	Sends a $(D rpc) using an unreliable protocol. Returns an empty $(D Variant).
 	*/
 	Variant rpcUnreliable(StringArg0, VarArgs...)(in StringArg0 method, VarArgs varArgs)
 	{
@@ -1074,7 +1092,7 @@ public:
 	package(godot) static GodotMethod!(Variant, long, String, GodotVarArgs) _GODOT_rpc_id;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rpc_id") = _GODOT_rpc_id;
 	/**
-	Sends a $(D rpc) to a specific peer identified by $(I peer_id).
+	Sends a $(D rpc) to a specific peer identified by `peer_id`. Returns an empty $(D Variant).
 	*/
 	Variant rpcId(StringArg1, VarArgs...)(in long peer_id, in StringArg1 method, VarArgs varArgs)
 	{
@@ -1091,7 +1109,7 @@ public:
 	package(godot) static GodotMethod!(Variant, long, String, GodotVarArgs) _GODOT_rpc_unreliable_id;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rpc_unreliable_id") = _GODOT_rpc_unreliable_id;
 	/**
-	Sends a $(D rpc) to a specific peer identified by $(I peer_id) using an unreliable protocol.
+	Sends a $(D rpc) to a specific peer identified by `peer_id` using an unreliable protocol. Returns an empty $(D Variant).
 	*/
 	Variant rpcUnreliableId(StringArg1, VarArgs...)(in long peer_id, in StringArg1 method, VarArgs varArgs)
 	{
@@ -1108,7 +1126,7 @@ public:
 	package(godot) static GodotMethod!(void, String, Variant) _GODOT_rset;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rset") = _GODOT_rset;
 	/**
-	Remotely changes property's value on other peers (and locally).
+	Remotely changes a property's value on other peers (and locally). Behaviour depends on the RPC configuration for the given property, see $(D rsetConfig). Also see $(D rpc) for RPCs for methods, most information applies to this method as well.
 	*/
 	void rset(StringArg0, VariantArg1)(in StringArg0 property, in VariantArg1 value)
 	{
@@ -1118,7 +1136,7 @@ public:
 	package(godot) static GodotMethod!(void, long, String, Variant) _GODOT_rset_id;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rset_id") = _GODOT_rset_id;
 	/**
-	Remotely changes property's value on a specific peer identified by $(I peer_id).
+	Remotely changes the property's value on a specific peer identified by `peer_id`.
 	*/
 	void rsetId(StringArg1, VariantArg2)(in long peer_id, in StringArg1 property, in VariantArg2 value)
 	{
@@ -1128,7 +1146,7 @@ public:
 	package(godot) static GodotMethod!(void, String, Variant) _GODOT_rset_unreliable;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rset_unreliable") = _GODOT_rset_unreliable;
 	/**
-	Remotely changes property's value on other peers (and locally) using an unreliable protocol.
+	Remotely changes the property's value on other peers (and locally) using an unreliable protocol.
 	*/
 	void rsetUnreliable(StringArg0, VariantArg1)(in StringArg0 property, in VariantArg1 value)
 	{
@@ -1138,7 +1156,7 @@ public:
 	package(godot) static GodotMethod!(void, long, String, Variant) _GODOT_rset_unreliable_id;
 	package(godot) alias _GODOT_methodBindInfo(string name : "rset_unreliable_id") = _GODOT_rset_unreliable_id;
 	/**
-	Remotely changes property's value on a specific peer identified by $(I peer_id) using an unreliable protocol.
+	Remotely changes property's value on a specific peer identified by `peer_id` using an unreliable protocol.
 	*/
 	void rsetUnreliableId(StringArg1, VariantArg2)(in long peer_id, in StringArg1 property, in VariantArg2 value)
 	{
@@ -1158,7 +1176,7 @@ public:
 		_setImportPath(v);
 	}
 	/**
-	
+	Pause mode. How the node will behave if the $(D SceneTree) is paused.
 	*/
 	@property Node.PauseMode pauseMode()
 	{
@@ -1182,8 +1200,7 @@ public:
 		setDisplayFolded(v);
 	}
 	/**
-	The name of the node. This name is unique among the siblings (other child nodes from the same parent).
-	When set to an existing name, the node will be automatically renamed
+	The name of the node. This name is unique among the siblings (other child nodes from the same parent). When set to an existing name, the node will be automatically renamed
 	*/
 	@property String name()
 	{

@@ -1,5 +1,14 @@
 /**
 Operating System functions.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.os;
 import std.meta : AliasSeq, staticIndexOf;
@@ -281,6 +290,46 @@ public:
 	{
 		_GODOT_get_clipboard.bind("_OS", "get_clipboard");
 		return ptrcall!(String)(_GODOT_get_clipboard, _godot_object);
+	}
+	package(godot) static GodotMethod!(long) _GODOT_get_video_driver_count;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_video_driver_count") = _GODOT_get_video_driver_count;
+	/**
+	
+	*/
+	long getVideoDriverCount() const
+	{
+		_GODOT_get_video_driver_count.bind("_OS", "get_video_driver_count");
+		return ptrcall!(long)(_GODOT_get_video_driver_count, _godot_object);
+	}
+	package(godot) static GodotMethod!(String, long) _GODOT_get_video_driver_name;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_video_driver_name") = _GODOT_get_video_driver_name;
+	/**
+	
+	*/
+	String getVideoDriverName(in long arg0) const
+	{
+		_GODOT_get_video_driver_name.bind("_OS", "get_video_driver_name");
+		return ptrcall!(String)(_GODOT_get_video_driver_name, _godot_object, arg0);
+	}
+	package(godot) static GodotMethod!(long) _GODOT_get_audio_driver_count;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_audio_driver_count") = _GODOT_get_audio_driver_count;
+	/**
+	
+	*/
+	long getAudioDriverCount() const
+	{
+		_GODOT_get_audio_driver_count.bind("_OS", "get_audio_driver_count");
+		return ptrcall!(long)(_GODOT_get_audio_driver_count, _godot_object);
+	}
+	package(godot) static GodotMethod!(String, long) _GODOT_get_audio_driver_name;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_audio_driver_name") = _GODOT_get_audio_driver_name;
+	/**
+	
+	*/
+	String getAudioDriverName(in long arg0) const
+	{
+		_GODOT_get_audio_driver_name.bind("_OS", "get_audio_driver_name");
+		return ptrcall!(String)(_GODOT_get_audio_driver_name, _godot_object, arg0);
 	}
 	package(godot) static GodotMethod!(long) _GODOT_get_screen_count;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_screen_count") = _GODOT_get_screen_count;

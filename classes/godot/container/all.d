@@ -12,8 +12,8 @@ public import
 	godot.panelcontainer,
 	godot.scripteditor,
 	godot.splitcontainer,
-	godot.vsplitcontainer,
 	godot.hsplitcontainer,
+	godot.vsplitcontainer,
 	godot.graphnode,
 	godot.margincontainer,
 	godot.viewportcontainer;

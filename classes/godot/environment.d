@@ -1,5 +1,14 @@
 /**
 Resource for environment nodes (like $(D WorldEnvironment)) that define multiple rendering options.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.environment;
 import std.meta : AliasSeq, staticIndexOf;
@@ -17,8 +26,9 @@ import godot.texture;
 /**
 Resource for environment nodes (like $(D WorldEnvironment)) that define multiple rendering options.
 
-Resource for environment nodes (like $(D WorldEnvironment)) that define multiple environment operations (such as background $(D Sky) or $(D Color), ambient light, fog, depth-of-field...).	These parameters affect the final render of the scene. The order of these operations is:
-	- DOF Blur
+Resource for environment nodes (like $(D WorldEnvironment)) that define multiple environment operations (such as background $(D Sky) or $(D Color), ambient light, fog, depth-of-field...). These parameters affect the final render of the scene. The order of these operations is:
+	
+- DOF Blur
 - Motion Blur
 - Bloom
 - Tonemap (auto exposure)

@@ -1,5 +1,14 @@
 /**
 Packs multiple small textures in a single, bigger one. Helps to optimize video memory costs and render calls.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.atlastexture;
 import std.meta : AliasSeq, staticIndexOf;

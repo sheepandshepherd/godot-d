@@ -1,5 +1,14 @@
 /**
 Control that provides a list of selectable items (and/or icons) in a single column, or optionally in multiple columns.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.itemlist;
 import std.meta : AliasSeq, staticIndexOf;
@@ -297,6 +306,16 @@ public:
 		_GODOT_unselect.bind("ItemList", "unselect");
 		ptrcall!(void)(_GODOT_unselect, _godot_object, idx);
 	}
+	package(godot) static GodotMethod!(void) _GODOT_unselect_all;
+	package(godot) alias _GODOT_methodBindInfo(string name : "unselect_all") = _GODOT_unselect_all;
+	/**
+	
+	*/
+	void unselectAll()
+	{
+		_GODOT_unselect_all.bind("ItemList", "unselect_all");
+		ptrcall!(void)(_GODOT_unselect_all, _godot_object);
+	}
 	package(godot) static GodotMethod!(bool, long) _GODOT_is_selected;
 	package(godot) alias _GODOT_methodBindInfo(string name : "is_selected") = _GODOT_is_selected;
 	/**
@@ -316,6 +335,16 @@ public:
 	{
 		_GODOT_get_selected_items.bind("ItemList", "get_selected_items");
 		return ptrcall!(PoolIntArray)(_GODOT_get_selected_items, _godot_object);
+	}
+	package(godot) static GodotMethod!(void, long, long) _GODOT_move_item;
+	package(godot) alias _GODOT_methodBindInfo(string name : "move_item") = _GODOT_move_item;
+	/**
+	
+	*/
+	void moveItem(in long p_from_idx, in long p_to_idx)
+	{
+		_GODOT_move_item.bind("ItemList", "move_item");
+		ptrcall!(void)(_GODOT_move_item, _godot_object, p_from_idx, p_to_idx);
 	}
 	package(godot) static GodotMethod!(long) _GODOT_get_item_count;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_item_count") = _GODOT_get_item_count;
@@ -576,6 +605,16 @@ public:
 	{
 		_GODOT_has_auto_height.bind("ItemList", "has_auto_height");
 		return ptrcall!(bool)(_GODOT_has_auto_height, _godot_object);
+	}
+	package(godot) static GodotMethod!(bool) _GODOT_is_anything_selected;
+	package(godot) alias _GODOT_methodBindInfo(string name : "is_anything_selected") = _GODOT_is_anything_selected;
+	/**
+	
+	*/
+	bool isAnythingSelected()
+	{
+		_GODOT_is_anything_selected.bind("ItemList", "is_anything_selected");
+		return ptrcall!(bool)(_GODOT_is_anything_selected, _godot_object);
 	}
 	package(godot) static GodotMethod!(long, Vector2, bool) _GODOT_get_item_at_position;
 	package(godot) alias _GODOT_methodBindInfo(string name : "get_item_at_position") = _GODOT_get_item_at_position;

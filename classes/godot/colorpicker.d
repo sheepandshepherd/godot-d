@@ -1,5 +1,14 @@
 /**
 Color picker control.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.colorpicker;
 import std.meta : AliasSeq, staticIndexOf;
@@ -245,6 +254,39 @@ public:
 		Array _GODOT_args = Array.empty_array;
 		_GODOT_args.append(arg0);
 		String _GODOT_method_name = String("_screen_input");
+		this.callv(_GODOT_method_name, _GODOT_args);
+	}
+	package(godot) static GodotMethod!(void) _GODOT__focus_enter;
+	package(godot) alias _GODOT_methodBindInfo(string name : "_focus_enter") = _GODOT__focus_enter;
+	/**
+	
+	*/
+	void _focusEnter()
+	{
+		Array _GODOT_args = Array.empty_array;
+		String _GODOT_method_name = String("_focus_enter");
+		this.callv(_GODOT_method_name, _GODOT_args);
+	}
+	package(godot) static GodotMethod!(void) _GODOT__focus_exit;
+	package(godot) alias _GODOT_methodBindInfo(string name : "_focus_exit") = _GODOT__focus_exit;
+	/**
+	
+	*/
+	void _focusExit()
+	{
+		Array _GODOT_args = Array.empty_array;
+		String _GODOT_method_name = String("_focus_exit");
+		this.callv(_GODOT_method_name, _GODOT_args);
+	}
+	package(godot) static GodotMethod!(void) _GODOT__html_focus_exit;
+	package(godot) alias _GODOT_methodBindInfo(string name : "_html_focus_exit") = _GODOT__html_focus_exit;
+	/**
+	
+	*/
+	void _htmlFocusExit()
+	{
+		Array _GODOT_args = Array.empty_array;
+		String _GODOT_method_name = String("_html_focus_exit");
 		this.callv(_GODOT_method_name, _GODOT_args);
 	}
 	/**

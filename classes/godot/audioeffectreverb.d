@@ -1,6 +1,15 @@
 /**
 Adds a Reverb audio effect to an Audio bus.
 Simulates the sound of acoustic environments such as rooms, concert halls, caverns, or an open spaces.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.audioeffectreverb;
 import std.meta : AliasSeq, staticIndexOf;

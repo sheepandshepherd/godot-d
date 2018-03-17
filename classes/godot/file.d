@@ -1,5 +1,14 @@
 /**
 Type to handle file reading and writing operations.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.file;
 import std.meta : AliasSeq, staticIndexOf;
@@ -152,6 +161,26 @@ public:
 	{
 		_GODOT_close.bind("_File", "close");
 		ptrcall!(void)(_GODOT_close, _godot_object);
+	}
+	package(godot) static GodotMethod!(String) _GODOT_get_path;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_path") = _GODOT_get_path;
+	/**
+	Returns the path as a $(D String) for the current open file.
+	*/
+	String getPath() const
+	{
+		_GODOT_get_path.bind("_File", "get_path");
+		return ptrcall!(String)(_GODOT_get_path, _godot_object);
+	}
+	package(godot) static GodotMethod!(String) _GODOT_get_path_absolute;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_path_absolute") = _GODOT_get_path_absolute;
+	/**
+	Returns the absolute path as a $(D String) for the current open file.
+	*/
+	String getPathAbsolute() const
+	{
+		_GODOT_get_path_absolute.bind("_File", "get_path_absolute");
+		return ptrcall!(String)(_GODOT_get_path_absolute, _godot_object);
 	}
 	package(godot) static GodotMethod!(bool) _GODOT_is_open;
 	package(godot) alias _GODOT_methodBindInfo(string name : "is_open") = _GODOT_is_open;

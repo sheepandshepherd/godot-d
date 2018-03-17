@@ -1,6 +1,15 @@
 /**
 Adds a Phaser audio effect to an Audio bus.
 Combines the original signal with a copy that is slightly out of phase with the original.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.audioeffectphaser;
 import std.meta : AliasSeq, staticIndexOf;

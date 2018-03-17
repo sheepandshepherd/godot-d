@@ -1,4 +1,13 @@
 /**
+Class to assist with character navigation and pathfinding.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
 
 */
 module godot.navigation2d;
@@ -14,7 +23,7 @@ import godot.classdb;
 import godot.node2d;
 import godot.navigationpolygon;
 /**
-
+Class to assist with character navigation and pathfinding.
 */
 @GodotBaseClass struct Navigation2D
 {

@@ -1,6 +1,15 @@
 /**
 Adds a Compressor audio effect to an Audio bus.
 Reduces sounds that exceed a certain threshold level, smooths out the dynamics and increases the overall volume.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.audioeffectcompressor;
 import std.meta : AliasSeq, staticIndexOf;

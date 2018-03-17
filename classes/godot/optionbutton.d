@@ -1,5 +1,14 @@
 /**
 Button control that provides selectable options when pressed.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.optionbutton;
 import std.meta : AliasSeq, staticIndexOf;
@@ -48,6 +57,18 @@ public:
 		Array _GODOT_args = Array.empty_array;
 		_GODOT_args.append(arg0);
 		String _GODOT_method_name = String("_selected");
+		this.callv(_GODOT_method_name, _GODOT_args);
+	}
+	package(godot) static GodotMethod!(void, long) _GODOT__focused;
+	package(godot) alias _GODOT_methodBindInfo(string name : "_focused") = _GODOT__focused;
+	/**
+	
+	*/
+	void _focused(in long arg0)
+	{
+		Array _GODOT_args = Array.empty_array;
+		_GODOT_args.append(arg0);
+		String _GODOT_method_name = String("_focused");
 		this.callv(_GODOT_method_name, _GODOT_args);
 	}
 	package(godot) static GodotMethod!(void, String, long) _GODOT_add_item;

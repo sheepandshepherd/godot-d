@@ -1,5 +1,14 @@
 /**
 Node for 2D tile-based maps.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.tilemap;
 import std.meta : AliasSeq, staticIndexOf;
@@ -538,6 +547,16 @@ public:
 	{
 		_GODOT_is_cell_transposed.bind("TileMap", "is_cell_transposed");
 		return ptrcall!(bool)(_GODOT_is_cell_transposed, _godot_object, x, y);
+	}
+	package(godot) static GodotMethod!(void) _GODOT_fix_invalid_tiles;
+	package(godot) alias _GODOT_methodBindInfo(string name : "fix_invalid_tiles") = _GODOT_fix_invalid_tiles;
+	/**
+	Clear cells that does not exist in the tileset.
+	*/
+	void fixInvalidTiles()
+	{
+		_GODOT_fix_invalid_tiles.bind("TileMap", "fix_invalid_tiles");
+		ptrcall!(void)(_GODOT_fix_invalid_tiles, _godot_object);
 	}
 	package(godot) static GodotMethod!(void) _GODOT_clear;
 	package(godot) alias _GODOT_methodBindInfo(string name : "clear") = _GODOT_clear;

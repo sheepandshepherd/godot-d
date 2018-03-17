@@ -1,5 +1,14 @@
 /**
 Used with $(D DynamicFont) to describe the location of a font file.
+
+Copyright:
+Copyright (c) 2007-2018 Juan Linietsky, Ariel Manzur.  
+Copyright (c) 2014-2018 Godot Engine contributors (cf. AUTHORS.md)  
+Copyright (c) 2017-2018 Godot-D contributors  
+
+License: $(LINK2 https://opensource.org/licenses/MIT, MIT License)
+
+
 */
 module godot.dynamicfontdata;
 import std.meta : AliasSeq, staticIndexOf;
@@ -36,6 +45,29 @@ public:
 		if(constructor is null) return typeof(this).init;
 		return cast(DynamicFontData)(constructor());
 	}
+	/// 
+	enum Hinting : int
+	{
+		/**
+		Disable font hinting (smoother but less crisp).
+		*/
+		hintingNone = 0,
+		/**
+		Use the light font hinting mode.
+		*/
+		hintingLight = 1,
+		/**
+		Use the default font hinting mode (crisper but less smooth).
+		*/
+		hintingNormal = 2,
+	}
+	/// 
+	enum Constants : int
+	{
+		hintingNone = 0,
+		hintingLight = 1,
+		hintingNormal = 2,
+	}
 	package(godot) static GodotMethod!(void, String) _GODOT_set_font_path;
 	package(godot) alias _GODOT_methodBindInfo(string name : "set_font_path") = _GODOT_set_font_path;
 	/**
@@ -55,6 +87,38 @@ public:
 	{
 		_GODOT_get_font_path.bind("DynamicFontData", "get_font_path");
 		return ptrcall!(String)(_GODOT_get_font_path, _godot_object);
+	}
+	package(godot) static GodotMethod!(void, long) _GODOT_set_hinting;
+	package(godot) alias _GODOT_methodBindInfo(string name : "set_hinting") = _GODOT_set_hinting;
+	/**
+	
+	*/
+	void setHinting(in long mode)
+	{
+		_GODOT_set_hinting.bind("DynamicFontData", "set_hinting");
+		ptrcall!(void)(_GODOT_set_hinting, _godot_object, mode);
+	}
+	package(godot) static GodotMethod!(DynamicFontData.Hinting) _GODOT_get_hinting;
+	package(godot) alias _GODOT_methodBindInfo(string name : "get_hinting") = _GODOT_get_hinting;
+	/**
+	
+	*/
+	DynamicFontData.Hinting getHinting() const
+	{
+		_GODOT_get_hinting.bind("DynamicFontData", "get_hinting");
+		return ptrcall!(DynamicFontData.Hinting)(_GODOT_get_hinting, _godot_object);
+	}
+	/**
+	The font hinting mode used by FreeType.
+	*/
+	@property DynamicFontData.Hinting hinting()
+	{
+		return getHinting();
+	}
+	/// ditto
+	@property void hinting(long v)
+	{
+		setHinting(v);
 	}
 	/**
 	The path to the vector font file.
