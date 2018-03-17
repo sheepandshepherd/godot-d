@@ -3,6 +3,7 @@
 	"description": "Godot game engine language bindings",
 	"authors": [ "sheepandshepherd" ],
 	"license": "MIT",
+	"version": "0.0.1",
 	
 	"targetType": "library",
 	"dflags-linux-dmd": ["-fPIC"],
